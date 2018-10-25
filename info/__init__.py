@@ -13,6 +13,9 @@ from info.modules.index import index_blu
 # 初始化数据库
 db = SQLAlchemy()
 
+# https://www.cnblogs.com/xieqiankun/p/type_hints_in_python3.html
+redis_store = None  # type: StrictRedis
+# redis_store: StrictRedis = None[python3.7可用]
 
 def setup_log(config_name):
     # 设置日志的记录等级

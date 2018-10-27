@@ -3,6 +3,7 @@ import re
 
 from flask import abort, jsonify
 from flask import current_app
+from flask import json
 from flask import make_response
 from flask import request
 
@@ -55,8 +56,8 @@ def send_sms_code():
         return jsonify(errno=RET.DATAERR, errmsg="验证码输入错误")
 
     # 5
-    sms_code_str = "%06d" % random.randint(0, 999999)
-    current_app.logger.debug("短信验证码内容是: %s" % sms_code_str)
+    sms_code_str = "%06d" % random.randint(0, 9999)
+    current_app.logger.debug("贪玩蓝月提醒您，您的验证码是 %s" % sms_code_str)
 
     # 6
     result = CCP().send_template_sms(mobile, [sms_code_str, constants.SMS_CODE_REDIS_EXPIRES / 5], "1")

@@ -2,6 +2,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 from flask import Flask
+# 可以用来指定 session 保存的位置
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
@@ -10,11 +11,13 @@ from redis import StrictRedis
 from config import config
 
 # 初始化数据库
+#  在Flask很多扩展里面都可以先初始化扩展的对象，然后再去调用 init_app 方法去初始化
 db = SQLAlchemy()
 
 # https://www.cnblogs.com/xieqiankun/p/type_hints_in_python3.html
 redis_store = None  # type: StrictRedis
-# redis_store: StrictRedis = None[python3.7可用]
+# redis_store: StrictRedis = None
+
 
 def setup_log(config_name):
     # 设置日志的记录等级
@@ -45,10 +48,9 @@ def create_app(config_name):
     CSRFProtect(app)
     # 设置session保存指定位置
     Session(app)
-    from info.modules.index import index_blu
+
     # 注册蓝图
+    from info.modules.index import index_blu
     app.register_blueprint(index_blu)
-    from info.modules.passport import passport_blu
-    app.register_blueprint(passport_blu)
 
     return app

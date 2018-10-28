@@ -4,7 +4,7 @@ $(function(){
 	$('.login_btn').click(function(){
         $('.login_form_con').show();
 	})
-	
+
 	// 点击关闭按钮关闭登录框或者注册框
 	$('.shutoff').click(function(){
 		$(this).closest('form').hide();
@@ -37,7 +37,6 @@ $(function(){
 	// 	$(this).children('.input_tip').animate({'top':-5,'font-size':12},'fast').siblings('input').focus().parent().addClass('hotline');
 	// })
 
-    // 报错解决方案
     $('.form_group').on('click',function(){
         $(this).children('input').focus()
     })
@@ -45,6 +44,7 @@ $(function(){
     $('.form_group input').on('focusin',function(){
         $(this).siblings('.input_tip').animate({'top':-5,'font-size':12},'fast')
         $(this).parent().addClass('hotline');
+    })
 
 	// 输入框失去焦点，如果输入框为空，则提示文字下移
 	$('.form_group input').on('blur focusout',function(){
@@ -81,7 +81,7 @@ $(function(){
 	var sHash = window.location.hash;
 	if(sHash!=''){
 		var sId = sHash.substring(1);
-		var oNow = $('.'+sId);		
+		var oNow = $('.'+sId);
 		var iNowIndex = oNow.index();
 		$('.option_list li').eq(iNowIndex).addClass('active').siblings().removeClass('active');
 		oNow.show().siblings().hide();
@@ -102,29 +102,52 @@ $(function(){
 		$(this).find('a')[0].click()
 	})
 
-    // TODO 登录表单提交
+    // 登录表单提交
     $(".login_form_con").submit(function (e) {
         e.preventDefault()
         var mobile = $(".login_form #mobile").val()
-        var password = $(".login_form #password").val()
+        var passport = $(".login_form #password").val()
 
         if (!mobile) {
             $("#login-mobile-err").show();
             return;
         }
 
-        if (!password) {
+        if (!passport) {
             $("#login-password-err").show();
             return;
         }
 
         // 发起登录请求
+        var params = {
+            "mobile": mobile,
+            "passport": passport
+        }
+
+        $.ajax({
+            url: "/passport/login",
+            type: "post",
+            contentType: "application/json",
+            data: JSON.stringify(params),
+            success: function (resp) {
+                if (resp.errno == "0") {
+                    // 代表登录成功
+                    location.reload()
+                }else {
+                    alert(resp.errmsg)
+                    $("#login-password-err").html(resp.errmsg)
+                    $("#login-password-err").show()
+                }
+            }
+        })
+
+
     })
 
 
     // TODO 注册按钮点击
     $(".register_form_con").submit(function (e) {
-        // 阻止默认提交操作
+        // 阻止默认表单提交操作
         e.preventDefault()
 
 		// 取到用户输入的内容
@@ -152,7 +175,6 @@ $(function(){
             return;
         }
 
-        // 发起注册请求
         // 准备参数
         var params = {
             "mobile": mobile,
@@ -167,7 +189,7 @@ $(function(){
             data: JSON.stringify(params),
             success: function (resp) {
                 if (resp.errno == "0") {
-                    // 代表注册成功
+                    // 代表注册成功就代表登录成功
                     location.reload()
                 }else {
                     // 代表注册失败
@@ -259,6 +281,7 @@ function sendSMSCode() {
         }
 
     })
+
 }
 
 // 调用该函数模拟点击左侧按钮

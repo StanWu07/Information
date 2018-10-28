@@ -29,7 +29,7 @@ def register():
         return jsonify(errno=RET.PARAMERR, errmsg="参数")
 
     # 校验手机号是否正确
-    if not re.match('1[35678]\\d{9}', mobile):
+    if not re.match(r'1[35678]\\d{9}$', mobile):
         return jsonify(errno=RET.PARAMERR, errmsg="手机号格式不正确")
 
     # 取到服务器保存的真实的短信验证码内容
@@ -52,21 +52,23 @@ def register():
     user.nick_name = mobile
     # 记录用户最后一次登录时间
     user.last_login = datetime.now()
-    # TODO 对密码做处理
+    # 对密码做处理
+    # 对password加密,返回password_hash
+    user.password = password
 
     # 6. 添加到数据库
-    # try:
-    #     db.session.add(user)
-    #     db.session.commit()
-    # except Exception as e:
-    #     current_app.logger.error(e)
-    #     db.session.rollback()
-    #     return jsonify(errno=RET.DBERR, errmsg="数据保存失败")
-    #
-    # # 往 session 中保存数据表示当前已经登录
-    # session["user_id"] = user.id
-    # session["mobile"] = user.mobile
-    # session["nick_name"] = user.nick_name
+    try:
+        db.session.add(user)
+        db.session.commit()
+    except Exception as e:
+        current_app.logger.error(e)
+        db.session.rollback()
+        return jsonify(errno=RET.DBERR, errmsg="数据保存失败")
+
+    # 往 session 中保存数据表示当前已经登录
+    session["user_id"] = user.id
+    session["mobile"] = user.mobile
+    session["nick_name"] = user.nick_name
 
     # 7. 返回响应
     return jsonify(errno=RET.OK, errmsg="注册成功")

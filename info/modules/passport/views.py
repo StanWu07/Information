@@ -77,7 +77,7 @@ def register():
         return jsonify(errno=RET.PARAMERR, errmsg="参数")
 
     # 校验手机号是否正确
-    if not re.match(r'1[35678]\\d{9}$', mobile):
+    if not re.match('1[35678]\\d{9}', mobile):
         return jsonify(errno=RET.PARAMERR, errmsg="手机号格式不正确")
 
     # 取到服务器保存的真实的短信验证码内容
@@ -147,7 +147,7 @@ def send_sms_code():
     if not all([mobile, image_code, image_code_id]):
         return jsonify(errno=RET.PARAMERR, errmsg="参数有误")
     # 检验手机号是否正确
-    if not re.match(r'1[35678]\\d{9}$', mobile):
+    if not re.match('1[35678]\\d{9}', mobile):
         return jsonify(errno=RET.PARAMERR, errmsg="手机号格式不正确")
     # 3
     try:

@@ -3,10 +3,12 @@ from logging.handlers import RotatingFileHandler
 
 from flask import Flask
 # 可以用来指定 session 保存的位置
+from flask_wtf.csrf import generate_csrf
+
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
-from flask.ext.wtf.csrf import generate_csrf
+
 from redis import StrictRedis
 
 from config import config
@@ -52,6 +54,14 @@ def create_app(config_name):
     CSRFProtect(app)
     # 设置session保存指定位置
     Session(app)
+
+    @app.after_request
+    def after_request(response):
+        # 生成随机的csrf_token的值
+        csrf_token = generate_csrf()
+        # 设置一个cookie
+        response.set_cookie("csrf_token", csrf_token)
+        return response
 
     # 注册蓝图
     from info.modules.index import index_blu

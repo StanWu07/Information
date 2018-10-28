@@ -55,21 +55,22 @@ def register():
     # TODO 对密码做处理
 
     # 6. 添加到数据库
-    try:
-        db.session.add(user)
-        db.session.commit()
-    except Exception as e:
-        current_app.logger.error(e)
-        db.session.rollback()
-        return jsonify(errno=RET.DBERR, errmsg="数据保存失败")
-
-    # 往 session 中保存数据表示当前已经登录
-    session["user_id"] = user.id
-    session["mobile"] = user.mobile
-    session["nick_name"] = user.nick_name
+    # try:
+    #     db.session.add(user)
+    #     db.session.commit()
+    # except Exception as e:
+    #     current_app.logger.error(e)
+    #     db.session.rollback()
+    #     return jsonify(errno=RET.DBERR, errmsg="数据保存失败")
+    #
+    # # 往 session 中保存数据表示当前已经登录
+    # session["user_id"] = user.id
+    # session["mobile"] = user.mobile
+    # session["nick_name"] = user.nick_name
 
     # 7. 返回响应
     return jsonify(errno=RET.OK, errmsg="注册成功")
+
 
 
 @passport_blu.route('/sms_code', methods=["POST"])

@@ -77,6 +77,8 @@ def login():
     session["mobile"] = user.mobile
     session["nick_name"] = user.nick_name
 
+    user.last_login =datetime.now()
+    #配置SQLACHEMY可以不用重复commit
     # 5. 响应
     return jsonify(errno=RET.OK, errmsg="登录成功")
 

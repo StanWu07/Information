@@ -285,6 +285,12 @@ function sendSMSCode() {
 }
 
 // 调用该函数模拟点击左侧按钮
+function logout() {
+    $.get('/passport/logout',function (resp) {
+        location.reload()
+    })
+}
+
 function fnChangeMenu(n) {
     var $li = $('.option_list li');
     if (n >= 0) {

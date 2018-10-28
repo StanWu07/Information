@@ -168,6 +168,7 @@ $(function(){
             success: function (resp) {
                 if (resp.errno == "0") {
                     // 代表注册成功
+                    location.reload()
                 }else {
                     // 代表注册失败
                     alert(resp.errmsg)

@@ -128,6 +128,9 @@ $(function(){
             url: "/passport/login",
             type: "post",
             contentType: "application/json",
+            headers:{
+                "X-CSRFToken": getCookie('csrf_token')
+            },
             data: JSON.stringify(params),
             success: function (resp) {
                 if (resp.errno == "0") {
@@ -187,6 +190,9 @@ $(function(){
             type: "post",
             contentType: "application/json",
             data: JSON.stringify(params),
+            headers: {
+                "X-CSRFToken": getCookie('csrf_token')
+            },
             success: function (resp) {
                 if (resp.errno == "0") {
                     // 代表注册成功就代表登录成功
@@ -252,6 +258,9 @@ function sendSMSCode() {
         data: JSON.stringify(params),
         // 请求参数的数据类型
         contentType: "application/json",
+        headers: {
+                "X-CSRFToken": getCookie('csrf_token')
+            },
         success: function (response) {
             if (response.errno == "0") {
                 // 代表发送成功

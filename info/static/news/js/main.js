@@ -248,7 +248,7 @@ function sendSMSCode() {
         "image_code_id": imageCodeId
     }
 
-    // 发起注册请求
+    // 发起短信请求
     $.ajax({
         // 请求地址
         url: "/passport/sms_code",

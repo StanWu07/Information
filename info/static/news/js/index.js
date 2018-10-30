@@ -48,21 +48,23 @@ $(function () {
         if ((canScrollHeight - nowScroll) < 100) {
             // 判断页数，去更新新闻数据
 
-            if (!data_querying){
+            if (!data_querying) {
                 data_querying = true
-                // 当前页数据如果小于总页数，那么才去加载数据
-                if (cur_page<total_page){
+
+                // 如果当前页数据如果小于总页数，那么才去加载数据
+                if (cur_page < total_page) {
                     cur_page += 1
                     // 去加载数据
                     updateNewsData()
                 }
+
             }
         }
     })
 })
 
 function updateNewsData() {
-    //  更新新闻数据
+    // 更新新闻数据
     var params = {
         "cid": currentCid,
         "page": cur_page
@@ -79,16 +81,15 @@ function updateNewsData() {
                 $(".list_con").html("")
             }
 
-            $(".list_con").html("")
             // 添加请求成功之后返回的数据
 
             // 显示数据
-            for (var i = 0; i < resp.data.news_dict_li.length; i++) {
+            for (var i=0;i<resp.data.news_dict_li.length;i++) {
                 var news = resp.data.news_dict_li[i]
                 var content = '<li>'
-                content += '<a href="#" class="news_pic fl"><img src="' + news.index_image_url + '?imageView2/1/w/170/h/170"></a>'
-                content += '<a href="#" class="news_title fl">' + news.title + '</a>'
-                content += '<a href="#" class="news_detail fl">' + news.digest + '</a>'
+                content += '<a href="/news/' + news.id + '" class="news_pic fl"><img src="' + news.index_image_url + '?imageView2/1/w/170/h/170"></a>'
+                content += '<a href="/news/' + news.id + '" class="news_title fl">' + news.title + '</a>'
+                content += '<a href="/news/' + news.id + '" class="news_detail fl">' + news.digest + '</a>'
                 content += '<div class="author_info fl">'
                 content += '<div class="source fl">来源：' + news.source + '</div>'
                 content += '<div class="time fl">' + news.create_time + '</div>'
@@ -96,7 +97,7 @@ function updateNewsData() {
                 content += '</li>'
                 $(".list_con").append(content)
             }
-        } else {
+        }else {
             // 请求失败
             alert(resp.errmsg)
         }

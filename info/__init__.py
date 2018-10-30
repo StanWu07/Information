@@ -2,13 +2,10 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 from flask import Flask
-# 可以用来指定 session 保存的位置
-from flask_wtf.csrf import generate_csrf
-
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
-
+from flask_wtf.csrf import generate_csrf
 from redis import StrictRedis
 
 from config import config

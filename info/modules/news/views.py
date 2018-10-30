@@ -1,12 +1,15 @@
 from flask import current_app
+from flask import g
 from flask import session
 from info import constants
 from info.models import User, News
 from info.modules.news import news_blu
 from flask import render_template
+from info.utils.common import user_login_data
 
 
 @news_blu.route('/<int:news_id>')
+@user_login_data
 def news_detail(news_id):
     """
     新闻详情

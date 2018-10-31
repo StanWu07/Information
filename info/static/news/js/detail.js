@@ -165,7 +165,7 @@ $(function(){
             var comment_id = $(this).attr("data-commentid")
             var params = {
                 "comment_id": comment_id,
-                "action": action,
+                "action": action
             }
 
             $.ajax({

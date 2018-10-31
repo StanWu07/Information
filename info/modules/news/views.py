@@ -255,10 +255,27 @@ def news_detail(news_id):
     except Exception as e:
         current_app.logger.error(e)
 
-    comment_dict_li = []
+    comment_like_ids = []
+    if g.user:
+        try:
+            # 需求：查询当前用户在当前新闻里面都点赞了哪些评论
+            # 1. 查询出当前新闻的所有评论 ([COMMENT]) 取到所有的评论id  [1, 2, 3, 4, 5]
+            comment_ids = [comment.id for comment in comments]
+            # 2. 再查询当前评论中哪些评论被当前用户所点赞 （[CommentLike]）查询comment_id 在第1步的评论id列表内的所有数据 & CommentList.user_id = g.user.id
+            comment_likes = CommentLike.query.filter(CommentLike.comment_id.in_(comment_ids), CommentLike.user_id==g.user.id).all()
+            # 3. 取到所有被点赞的评论id 第2步查询出来是一个 [CommentLike] --> [3, 5]
+            comment_like_ids = [comment_like.comment_id for comment_like in comment_likes]  # [3, 5]
+        except Exception as e:
+            current_app.logger.error(e)
 
+    comment_dict_li = []
     for comment in comments:
         comment_dict = comment.to_dict()
+        # 代表没有点赞
+        comment_dict["is_like"] = False
+        # 判断当前遍历到的评论是否被当前登录用户所点赞
+        if comment.id in comment_like_ids:
+            comment_dict["is_like"] = True
         comment_dict_li.append(comment_dict)
 
     data = {

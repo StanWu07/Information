@@ -24,10 +24,10 @@ def comment_like():
         return jsonify(errno=RET.SESSIONERR, errmsg="用户未登录")
     # 1. 取到请求参数
     comment_id = request.json.get("comment_id")
-    news_id = request.json.get("news_id")
+    # news_id = request.json.get("news_id")
     action = request.json.get("action")
 
-    if not all([comment_id, news_id, action]):
+    if not all([comment_id, action]):
         return jsonify(errno=RET.PARAMERR, errmsg="参数错误")
 
     if action not in ["add", "remove"]:
@@ -35,7 +35,7 @@ def comment_like():
 
     try:
         comment_id = int(comment_id)
-        news_id = int(news_id)
+        # news_id = int(news_id)
     except Exception as e:
         current_app.logger.error(e)
         return jsonify(errno=RET.PARAMERR, errmsg="参数错误")
@@ -58,14 +58,15 @@ def comment_like():
         comment_like_model.user_id = user.id
         comment_like_model.comment_id = comment.id
         db.session.add(comment_like_model)
+        comment.like_count += 1
 
     else:
         # 取消点赞评论
         comment_like_model = CommentLike.query.filter(CommentLike.user_id == user.id,
                                                       CommentLike.comment_id == comment.id).first()
         if comment_like_model:
-            comment_like_model.delete()
-
+            comment_like_model.delete(comment_like_model)
+            comment.like_count -= 1
     try:
         db.session.commit()
     except Exception as e:

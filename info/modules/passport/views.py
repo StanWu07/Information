@@ -28,7 +28,8 @@ def logout():
     session.pop('user_id', None)
     session.pop('mobile', None)
     session.pop('nick_name', None)
-
+    # 若不删除，管理员先登录后，其他用户可以登录到后台
+    session.pop('is_admin', None)
     return jsonify(errno=RET.OK, errmsg="退出成功")
 
 

@@ -31,7 +31,7 @@ def news_list():
         current_app.logger.error(e)
         return jsonify(erron= RET.PARAMERR,errmsg= "参数")
 
-    filters = []
+    filters = [News.status == 0]
     # 查询的数据不是最新的数据
     if cid != 1:
         filters.append(News.category_id == cid)

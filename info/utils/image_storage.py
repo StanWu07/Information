@@ -1,7 +1,7 @@
 from qiniu import Auth, put_data
 
-access_key = "yV4GmNBLOgQK-1Sn3o4jktGLFdFSrlywR2C-hvsW"
-secret_key = "bixMURPL6tHjrb8QKVg2tm7n9k8C7vaOeQ4MEoeW"
+access_key = "wxZpm_vV7jUExg3mqPmYRBYsriPYjAVE_9Dxgq-B"
+secret_key = "KYYtYSYZ8w7fXnUQJmqYoOGZSBWBL1S7o5z72RWX"
 bucket_name = "ihome"
 
 

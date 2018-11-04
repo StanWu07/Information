@@ -7,10 +7,46 @@ from flask import request
 from flask import session
 from flask import url_for
 from flask import g
-
+from info import constants
 from info.models import User
 from info.modules.admin import admin_blu
 from info.utils.common import user_login_data
+
+
+@admin_blu.route('/user_list')
+def user_list():
+    # 取用户请求的页数默认是为1
+    page = request.args.get("page", 1)
+
+    try:
+        page = int(page)
+    except Exception as e:
+        current_app.logger.error(e)
+        page = 1
+
+    users = []
+    current_page = 1
+    total_page = 1
+
+    try:
+        paginate = User.query.filter(User.is_admin==False).paginate(page, constants.ADMIN_USER_PAGE_MAX_COUNT)
+        users = paginate.items
+        current_page = paginate.page
+        total_page = paginate.pages
+    except Exception as e:
+        current_app.logger.error(e)
+
+    # 进行模型列表转字典列表
+    user_dict_li = []
+    for user in users:
+        user_dict_li.append(user.to_admin_dict())
+
+    data = {
+        "users": user_dict_li,
+        "total_page": total_page,
+        "current_page": current_page,
+    }
+    return render_template('admin/user_list.html', data=data)
 
 
 @admin_blu.route('/user_count')

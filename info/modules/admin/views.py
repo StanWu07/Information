@@ -14,6 +14,12 @@ from info.utils.common import user_login_data
 from info.utils.response_code import RET
 
 
+@admin_blu.route('/news_edit_detail')
+def news_edit_detail():
+    # 查询点击的新闻的相关数据并传入到模板中
+    return render_template('admin/news_edit_detail.html')
+
+
 @admin_blu.route('/news_edit')
 def news_edit():
     """新闻编辑"""

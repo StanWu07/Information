@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>{% block titleBlock %}{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="../../static/news/css/reset.css">
+     {% block cssBlock %}
+
+    {% endblock %}
     <link rel="stylesheet" type="text/css" href="../../static/news/css/main.css">
     <script type="text/javascript" src="../../static/news/js/jquery-1.12.4.min.js"></script>
     <script type="text/javascript" src="../../static/news/js/main.js"></script>
@@ -30,7 +33,7 @@
                 <!-- 用户登录后显示下面，隐藏上面 -->
                 <div class="user_login fr">
                     <img src="{% if data.user.avatar_url %} {{ data.user.avatar_url }} {% else %}../../static/news/images/person01.png{% endif %}" class="lgin_pic">
-                    <a href="#" id="nick_name">{{ data.user.nick_name }}</a>
+                    <a href="/user/info" id="nick_name">{{ data.user.nick_name }}</a>
                     <a href="javascript:;" onclick="logout()">退出</a>
                 </div>
             {% else %}
